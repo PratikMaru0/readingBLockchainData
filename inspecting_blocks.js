@@ -1,7 +1,8 @@
 const { ethers } = require("ethers");
+var crypto = require("crypto");
 const { createPool } = require("mysql");
 
-const INFURA_ID = "";  // Please enter INFURA ID.
+const INFURA_ID = ""; // Please enter INFURA ID.
 const provider = new ethers.providers.JsonRpcProvider(
   `https://kovan.infura.io/v3/${INFURA_ID}`
 );
@@ -16,19 +17,18 @@ const pool = createPool({
 });
 
 const main = async () => {
-  // .... Wallet Address creation.
-  var addresses = [
-    "0xaB523b56fb94466FBEB11ECC6dbEc9ED40a2efE0",
-    "0x96f79b13Acd37aa13F9eebfFF62e96628af260FC",
-    "0xf79652824CAeCa4f0f243490C9a807F1D2BaC446",
-    "0xc0A57bBeb6651A9f59bd831CC130a750db51ed69",
-    "0xc6c50FE89dE8929734738E4a5B146736b1e1De63",
-    "0x2B4963faa13AA37D82812d55531aF32Fb1B72273",
-    "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
-    "0x5D0Aeb8EeB92741961AfA332F880917f104fa3AD",
-    "0xc015bcf1Ca3f704E717D34741f3eBdE6B131b396"
-  ];
+  // .... to store 100 addresses.
+  var addresses = [];
 
+  // Generating 100 addresses and pushing that in addresses array.
+
+  for (let i = 0; i < 100; i++) {
+    var id = crypto.randomBytes(32).toString("hex");
+    var private_key = "0x" + id;
+    var wallet = new ethers.Wallet(private_key);
+    addresses.push(wallet.address);
+  }
+  
   var block = await provider.getBlockNumber();
   // block = 32099713;
   console.log(block);
